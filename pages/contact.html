@@ -3,9 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Contact Us - Winterberg Agricultural High School</title>
 </head>
 <body>
-    
+    <!--Header Section-->
+    <header>
+        <!--Logo-->
+        <div class="logo">
+            <img src="../assets/images/305408198_572691271316193_6727029344683562193_n.png" alt="Winterberg Agricultural High School badge">
+        </div>
+        <!--Navigation Links-->
+        <nav>
+            <a href="../index.html">HOME</a>
+            <a href="./about.html">ABOUT US</a>
+            <a href="./products.html">PRODUCTS &amp; SERVICES</a>
+            <a href="./programs.html">ACADEMIC &amp; PRACTICAL PROGRAMS</a>
+            <a href="./contact.html" class="active">CONTACT US</a>
+            <a href="./enquiry.html">ENQUIRY</a>
+        </nav>
+    </header>
+
+    <!--Main Section-->
+    <main>
+        <h1>Contact Us</h1>
+        <p>
+            We make everything easier for you to get more information about the school.
+        </p>
+        <hr>
+
+        <!--Contact Details Section-->
+        <section id="contact-details">
+            <h2>Get in Touch</h2>
+            <ul>
+                <li>Email: <a href="mailto:amandac@winagric.co.za">amandac@winagric.co.za</a></li>
+                <li>Phone: <a href="tel:0465550005">046 555 0005</a></li>
+                <li>Hours: Monday to Friday, 08:00&ndash;14:00</li>
+            </ul>
+        </section>
+        <hr>
+
+        <!--Location Section-->
+        <section id="location">
+            <h2>Our Office</h2>
+            <ul>
+                <li>Address: Parliament Street, Fort Beaufort, 5720, Eastern Cape, South Africa</li>
+                <li><a href="https://www.google.com/maps/place/Winterberg+Agricultural+High+School" target="_blank" rel="noopener noreferrer">View on Google Maps</a></li>
+            </ul>
+            <!--Google Maps-->
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3354.207834928888!2d26.623616475117156!3d-32.786748073659574!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e638f99fea651ab%3A0xd224529fecefa583!2sWinterberg%20Agricultural%20High%20School!5e0!3m2!1sen!2sza!4v1786621154869!5m2!1sen!2sza"
+                width="600"
+                height="450"
+                style="border:0;"
+                allowfullscreen
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                title="Winterberg Agricultural High School location">
+            </iframe>
+        </section>
+        <hr>
+
+        <!--Inquiry Form Section-->
+        <section id="inquiry-form">
+            <h2>Inquiry Form</h2>
+            <form action="#" method="post">
+                <label for="email">Email address:</label><br>
+                <input type="email" id="email" name="email" placeholder="Where can we reply to you?" required>
+                <br><br>
+
+                <label for="proj_type">Grade applying for:</label><br>
+                <select id="proj_type" name="proj_type" required>
+                    <option value="">--Select--</option>
+                    <option value="grade8">Grade 8</option>
+                    <option value="grade9">Grade 9</option>
+                    <option value="grade10">Grade 10</option>
+                    <option value="grade11">Grade 11</option>
+                    <option value="grade12">Grade 12</option>
+                </select>
+                <br><br>
+
+                <label for="budget">School fees budget:</label><br>
+                <input type="number" id="budget" name="budget">
+                <br><br>
+
+                <label for="contact_number">Contact number:</label><br>
+                <input type="tel" id="contact_number" name="contact_number" placeholder="Work / cellphone number">
+                <br><br>
+
+                <label for="message">Message:</label><br>
+                <textarea id="message" name="message" rows="10" cols="40" placeholder="Tell us about your goals and timeline"></textarea>
+                <br><br>
+
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+    </main>
+
+    <!--Footer Section-->
+    <footer>
+        <nav>
+            <a href="../index.html">HOME</a>
+            <a href="./about.html">ABOUT US</a>
+            <a href="./contact.html">CONTACT US</a>
+        </nav>
+        <address>
+            Parliament Street, Fort Beaufort, 5720, Eastern Cape, South Africa<br>
+            Email: <a href="mailto:amandac@winagric.co.za">amandac@winagric.co.za</a><br>
+            Phone: <a href="tel:0465550005">046 555 0005</a>
+        </address>
+        <p>&copy; 2026 Winterberg Agricultural High School. All rights reserved.</p>
+    </footer>
 </body>
 </html>
