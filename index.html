@@ -4,74 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Winterberg Agricultural High School</title>
-    <!--Part 2: external stylesheet linked on every page-->
-    <link rel="stylesheet" href="./assets/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
     <!--Header Section-->
-    <header>
-        <input type="checkbox" id="nav-toggle" class="nav-toggle">
-        <div class="nav-bar">
-            <!--Logo / school badge, top left-->
-            <div class="brand">
-                <img src="./assets/images/305408198_572691271316193_6727029344683562193_n.png" alt="Winterberg Agricultural High School badge">
-                <span class="site-title">WINTERBERG</span>
-            </div>
-            <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation">&#9776;</label>
-            <!--Navigation links-->
-            <nav>
-                <ul>
-                    <li><a href="./index.html" class="active">HOME</a></li>
-                    <li><a href="./pages/about.html">ABOUT</a></li>
-                    <li><a href="./pages/contact.html">CONTACT US</a></li>
-                    <li><a href="#">ENQUIRY</a></li>
-                    <li><a href="#">SERVICES</a></li>
-                </ul>
-            </nav>
-        </div>
+    <header class="site-header">
+        <!--Logo / School name-->
+        <a href="./index.html" class="brand">WINTERBERG <span>AGRICULTURAL HIGH SCHOOL</span></a>
+        <!--Navigation links-->
+        <nav class="primary-nav">
+            <a href="./index.html" class="active">HOME</a>
+            <a href="./pages/about.html">ABOUT</a>
+            <a href="./pages/contact.html">CONTACT US</a>
+            <a href="#">ENQUIRY</a>
+            <a href="#">SERVICES</a>
+        </nav>
     </header>
 
     <!--Main section-->
     <main>
+        <!--First / hero section-->
         <section class="hero">
             <div class="hero-text">
-                <h1 class="page-title">Winterberg Agricultural High School</h1>
+                <!--Welcome message-->
+                <h1>WINTERBERG AGRICULTURAL HIGH SCHOOL</h1>
                 <p>
-                    The proud school of Winterberg Agricultural High School, based in the Kat River
-                    Valley near Fort Beaufort, South Africa, has a fantastic reputation for
-                    excellence in education. The school body is a trusted pillar of the community.
-                    For registration and admissions, please use the enquiry form.
+                    The proud school of Winterberg Agricultural High School based in South Africa,
+                    has a fantastic reputation for excellence in education.
+                    The school body is a trusted pillar of the community.
+                    For registration and admissions please use the form to the right.
                 </p>
-                <a href="./pages/contact.html" class="btn mt-lg">Enquire Now</a>
+                <a href="./pages/contact.html" class="btn">Enquire Now</a>
             </div>
-            <div class="hero-image">
-                <img src="./assets/images/305408198_572691271316193_6727029344683562193_n.png" alt="Winterberg Agricultural High School students and livestock">
-            </div>
+            <!--Insert an image-->
+            <img src="./assets/images/305408198_572691271316193_6727029344683562193_n.png" alt="Winterberg Agricultural High School students and livestock" class="hero-img">
         </section>
 
-        <section class="section-alt">
-            <h2 class="text-center">What Makes Us Different</h2>
-            <div class="card-group mt-lg">
-                <div class="card">
-                    <h2>Combined Curriculum</h2>
-                    <p>Standard academic subjects taught alongside comprehensive, hands-on farming experience.</p>
-                </div>
-                <div class="card">
-                    <h2>Practical Facilities</h2>
-                    <p>A working farm enterprise including a dairy herd, piggery, poultry units, citrus orchards and lucerne.</p>
-                </div>
-                <div class="card">
-                    <h2>Specialised Skills</h2>
-                    <p>Training in rural trade skills such as welding, metalwork, meat processing and mohair classing.</p>
-                </div>
+        <!--Highlights section-->
+        <section class="highlights">
+            <div class="card">
+                <h2>Combined Curriculum</h2>
+                <p>Standard academic subjects integrated with hands-on farming practice.</p>
+            </div>
+            <div class="card">
+                <h2>Working Farm</h2>
+                <p>Dairy herd, piggery, poultry units, citrus orchards and lucerne fields.</p>
+            </div>
+            <div class="card">
+                <h2>Trade Skills</h2>
+                <p>Welding, metalwork, meat processing, mohair classing and sheep shearing.</p>
             </div>
         </section>
     </main>
 
     <!--Footer section-->
-    <footer>
-        <p>&copy; 2026 Winterberg Agricultural High School. All rights reserved.</p>
-        <p>Parliament Street, Fort Beaufort, 5720, Eastern Cape, South Africa.</p>
+    <footer class="site-footer">
+        <p>&copy; 2026 Winterberg Agricultural High School. Ut Colant Et Custodiant.</p>
     </footer>
 </body>
 </html>
