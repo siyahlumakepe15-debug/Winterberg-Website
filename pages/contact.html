@@ -3,94 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - Winterberg Agricultural High School</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Winterberg Contact Us</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
     <!--Header Section-->
-    <header class="site-header">
-        <a href="../index.html" class="brand">WINTERBERG <span>AGRICULTURAL HIGH SCHOOL</span></a>
-        <nav class="primary-nav">
+    <header>
+        <!--Navigation Links-->
+        <nav>
             <a href="../index.html">HOME</a>
-            <a href="./about.html">ABOUT US</a>
-            <a href="./contact.html" class="active">CONTACT US</a>
-            <a href="#">ENQUIRY</a>
+            <a href="about.html">ABOUT US</a>
+            <a href="contact.html" class="active">CONTACT US</a>
+            <a href="enquiry.html">ENQUIRY</a>
             <a href="#">SERVICES</a>
         </nav>
     </header>
 
     <!--Main Section-->
     <main>
-        <section class="page-intro">
-            <h1>Contact Us</h1>
-            <p>We make everything easier for you to get more information about the school.</p>
-        </section>
-
-        <hr>
+        <h1>Contact Us</h1>
+        <p style="text-align:center;">
+            We make it easy for you to get more information about the school.
+        </p>
+        <hr/>
 
         <!--Contact Details-->
-        <section class="contact-details">
-            <h2>Get in Touch</h2>
+        <section>
+            <h2 style="text-align:center;">Get in touch</h2>
             <ul>
-                <li>Email: amandac@winagric.co.za</li>
+                <li>Email: <a href="mailto:amandac@winagric.co.za">amandac@winagric.co.za</a></li>
                 <li>Phone: 046 555 0005</li>
-                <li>Hours: Monday to Friday 08:00 - 14:00</li>
+                <li>Hours: Monday to Friday 08:00-14:00</li>
             </ul>
         </section>
-
-        <hr>
+        <hr/>
 
         <!--Location Section-->
-        <section class="location">
-            <h2>Our Office</h2>
+        <section>
+            <h2 style="text-align:center;">Our Office</h2>
             <ul>
                 <li>Address: Parliament Street, Fort Beaufort, 5720, Eastern Cape, South Africa.</li>
             </ul>
             <!--Google Maps-->
-            <div class="map-wrapper">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3354.207834928888!2d26.623616475117156!3d-32.786748073659574!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e638f99fea651ab%3A0xd224529fecefa583!2sWinterberg%20Agricultural%20High%20School!5e0!3m2!1sen!2sza!4v1786621154869!5m2!1sen!2sza"
-                    width="600" height="450" style="border:0;" allowfullscreen loading="lazy"
-                    referrerpolicy="strict-origin-when-cross-origin"></iframe>
-            </div>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3354.207834928888!2d26.623616475117156!3d-32.786748073659574!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e638f99fea651ab%3A0xd224529fecefa583!2sWinterberg%20Agricultural%20High%20School!5e0!3m2!1sen!2sza!4v1786621154869!5m2!1sen!2sza" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" title="Map to Winterberg Agricultural High School"></iframe>
         </section>
+        <hr/>
 
-        <hr>
+        <!--Contact form-->
+        <section class="card">
+            <h2 style="text-align:center;">Send Us a Message</h2>
+            <p>For a general message to the school. Looking for fees or places? Use the <a href="enquiry.html">admissions enquiry form</a>.</p>
 
-        <!--Inquiry form-->
-        <section class="inquiry">
-            <h2>Inquiry Form</h2>
-            <form action="#" method="post" class="inquiry-form">
-                <label for="email">Email address:</label>
-                <input type="email" id="email" name="email" placeholder="Where can we reply to you?" required>
+            <form id="contactForm" novalidate>
+                <label for="name">Full name *</label>
+                <input type="text" id="name" name="name" autocomplete="name">
+                <div class="error" id="nameErr"></div>
 
-                <label for="proj_type">Grade applying for:</label>
-                <select id="proj_type" name="proj_type" required>
-                    <option value="">--select--</option>
-                    <option value="grade8">Grade 8</option>
-                    <option value="grade9">Grade 9</option>
-                    <option value="grade10">Grade 10</option>
-                    <option value="grade11">Grade 11</option>
-                    <option value="grade12">Grade 12</option>
+                <label for="email">Email address *</label>
+                <input type="email" id="email" name="email" autocomplete="email" placeholder="where can we reply to you">
+                <div class="error" id="emailErr"></div>
+
+                <label for="phone">Cellphone number *</label>
+                <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="e.g. 0821234567">
+                <div class="error" id="phoneErr"></div>
+
+                <label for="msgType">Type of message *</label>
+                <select id="msgType" name="msgType">
+                    <option value="">-- Select --</option>
+                    <option>General question</option>
+                    <option>Feedback or compliment</option>
+                    <option>Complaint</option>
+                    <option>Request for a school visit</option>
+                    <option>Sponsorship or partnership</option>
+                    <option>Media request</option>
                 </select>
+                <div class="error" id="msgTypeErr"></div>
 
-                <label for="budget">School fees budget (R):</label>
-                <input type="number" id="budget" name="budget">
+                <label for="message">Your message * (at least 20 characters)</label>
+                <textarea id="message" name="message" rows="7" placeholder="Type your message here"></textarea>
+                <div class="error" id="messageErr"></div>
 
-                <label for="cell">Work / contact cellphone number:</label>
-                <input type="tel" id="cell" name="cell">
-
-                <label for="message">Tell us about your goals and timeline:</label>
-                <textarea id="message" name="message" rows="6" placeholder="Tell us about your goals and timeline"></textarea>
-
-                <button type="submit" class="btn">Submit</button>
+                <button type="submit">Prepare my email</button>
             </form>
+
+            <div id="preview" class="result">
+                <strong>Your email is ready. Check it, then click "Send email":</strong>
+                <pre id="previewText"></pre>
+                <a id="sendLink" class="btn" href="#">Send email</a>
+            </div>
         </section>
     </main>
 
-    <footer class="site-footer">
-        <p>&copy; 2026 Winterberg Agricultural High School. Ut Colant Et Custodiant.</p>
-    </footer>
+    <footer>&copy; Winterberg Agricultural High School, Fort Beaufort</footer>
+
+    <script>
+        // The email is addressed to this recipient
+        const RECIPIENT = 'amandac@winagric.co.za';
+
+        const form = document.getElementById('contactForm');
+        function setErr(id, msg) { document.getElementById(id).textContent = msg; return !msg; }
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const v = id => document.getElementById(id).value.trim();
+            let ok = true;
+
+            ok = setErr('nameErr', (v('name').length >= 2 && /^[A-Za-z\s'\-]+$/.test(v('name'))) ? '' : 'Enter a valid name (letters only).') && ok;
+            ok = setErr('emailErr', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email')) ? '' : 'Enter a valid email address.') && ok;
+            ok = setErr('phoneErr', /^(\+27|0)[0-9]{9}$/.test(v('phone').replace(/[\s-]/g, '')) ? '' : 'Enter a valid SA number, e.g. 0821234567.') && ok;
+            ok = setErr('msgTypeErr', v('msgType') ? '' : 'Please select a message type.') && ok;
+            ok = setErr('messageErr', v('message').length >= 20 ? '' : 'Please write at least 20 characters.') && ok;
+            if (!ok) return;
+
+            const subject = v('msgType') + ' - ' + v('name');
+            const body =
+`Name: ${v('name')}
+Email: ${v('email')}
+Phone: ${v('phone')}
+Message type: ${v('msgType')}
+
+Message:
+${v('message')}`;
+
+            document.getElementById('previewText').textContent = `To: ${RECIPIENT}\nSubject: ${subject}\n\n${body}`;
+            document.getElementById('sendLink').href =
+                `mailto:${RECIPIENT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+            const preview = document.getElementById('preview');
+            preview.style.display = 'block';
+            preview.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
 </body>
 </html>
