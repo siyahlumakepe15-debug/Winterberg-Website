@@ -1,0 +1,586 @@
+/* =========================================================
+   WINTERBERG AGRICULTURAL HIGH SCHOOL — main.js  (Part 3)
+   Plain JavaScript (no framework). Each feature is a small
+   function that only runs if its markup exists on the page.
+
+   1. Navigation, header & back-to-top
+   2. Scroll-reveal animation & animated counters
+   3. Accordion (FAQ, timeline)
+   4. Tabs (programs page)
+   5. Filter pills (produce tracker)
+   6. Gallery lightbox
+   7. Interactive map (Leaflet)
+   8. Forms: validation, error handling, AJAX, email compile
+   ========================================================= */
+(function () {
+    'use strict';
+
+    var $ = function (sel, ctx) { return (ctx || document).querySelector(sel); };
+    var $$ = function (sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); };
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---------- 1. Navigation, header, back-to-top ---------- */
+    function initNav() {
+        var toggle = $('.nav-toggle');
+        var nav = $('#primary-nav');
+        var header = $('.site-header');
+        var toTop = $('.to-top');
+
+        if (toggle && nav) {
+            toggle.addEventListener('click', function () {
+                var open = nav.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', String(open));
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && nav.classList.contains('open')) {
+                    nav.classList.remove('open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                    toggle.focus();
+                }
+            });
+            // close the menu after choosing a link (mobile)
+            nav.addEventListener('click', function (e) {
+                if (e.target.closest('a')) {
+                    nav.classList.remove('open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+        function onScroll() {
+            var y = window.scrollY || document.documentElement.scrollTop;
+            if (header) { header.classList.toggle('is-scrolled', y > 24); }
+            if (toTop) { toTop.classList.toggle('show', y > 600); }
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        if (toTop) {
+            toTop.addEventListener('click', function () {
+                window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+            });
+        }
+    }
+
+    /* ---------- 2. Reveal on scroll + counters ---------- */
+    function animateCount(el) {
+        var target = parseInt(el.getAttribute('data-count'), 10);
+        var suffix = el.getAttribute('data-suffix') || '';
+        if (isNaN(target)) { return; }
+        if (reduceMotion) { el.textContent = target + suffix; return; }
+        var duration = 1400;
+        var start = null;
+        function step(ts) {
+            if (start === null) { start = ts; }
+            var p = Math.min((ts - start) / duration, 1);
+            var eased = 1 - Math.pow(1 - p, 3);                // ease-out cubic
+            el.textContent = Math.round(target * eased) + suffix;
+            if (p < 1) { requestAnimationFrame(step); }
+        }
+        requestAnimationFrame(step);
+    }
+
+    function initReveal() {
+        var items = $$('.reveal');
+        var counters = $$('[data-count]');
+
+        if (!('IntersectionObserver' in window)) {
+            items.forEach(function (el) { el.classList.add('in-view'); });
+            return;
+        }
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+        items.forEach(function (el) { io.observe(el); });
+
+        var co = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    animateCount(entry.target);
+                    co.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.6 });
+        counters.forEach(function (el) { el.textContent = '0' + (el.getAttribute('data-suffix') || ''); co.observe(el); });
+    }
+
+    /* ---------- 3. Accordion ---------- */
+    function initAccordions() {
+        $$('[data-accordion]').forEach(function (acc) {
+            var items = $$('.acc-item', acc);
+            items.forEach(function (item, i) {
+                var btn = $('.acc-trigger', item);
+                var panel = $('.acc-panel', item);
+                var id = 'acc-' + Math.random().toString(36).slice(2, 7) + i;
+                btn.id = btn.id || id + '-btn';
+                panel.id = panel.id || id + '-panel';
+                btn.setAttribute('aria-controls', panel.id);
+                panel.setAttribute('role', 'region');
+                panel.setAttribute('aria-labelledby', btn.id);
+
+                btn.addEventListener('click', function () {
+                    var open = !item.classList.contains('is-open');
+                    // one open at a time
+                    items.forEach(function (other) {
+                        other.classList.remove('is-open');
+                        $('.acc-trigger', other).setAttribute('aria-expanded', 'false');
+                    });
+                    if (open) {
+                        item.classList.add('is-open');
+                        btn.setAttribute('aria-expanded', 'true');
+                    }
+                });
+                // arrow-key navigation between headers
+                btn.addEventListener('keydown', function (e) {
+                    var idx = items.indexOf(item), next = null;
+                    if (e.key === 'ArrowDown') { next = items[(idx + 1) % items.length]; }
+                    if (e.key === 'ArrowUp') { next = items[(idx - 1 + items.length) % items.length]; }
+                    if (e.key === 'Home') { next = items[0]; }
+                    if (e.key === 'End') { next = items[items.length - 1]; }
+                    if (next) { e.preventDefault(); $('.acc-trigger', next).focus(); }
+                });
+            });
+            // open the first item by default
+            if (items[0]) {
+                items[0].classList.add('is-open');
+                $('.acc-trigger', items[0]).setAttribute('aria-expanded', 'true');
+            }
+        });
+    }
+
+    /* ---------- 4. Tabs ---------- */
+    function initTabs() {
+        $$('[data-tabs]').forEach(function (wrap) {
+            var tabs = $$('[role="tab"]', wrap);
+            var panels = tabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
+
+            function select(index, focus) {
+                tabs.forEach(function (t, i) {
+                    var on = i === index;
+                    t.setAttribute('aria-selected', String(on));
+                    t.tabIndex = on ? 0 : -1;
+                    panels[i].hidden = !on;
+                });
+                if (focus) { tabs[index].focus(); }
+            }
+            tabs.forEach(function (tab, i) {
+                tab.addEventListener('click', function () {
+                    select(i, false);
+                    history.replaceState(null, '', '#' + panels[i].id);
+                });
+                tab.addEventListener('keydown', function (e) {
+                    var n = tabs.length, to = null;
+                    if (e.key === 'ArrowRight') { to = (i + 1) % n; }
+                    if (e.key === 'ArrowLeft') { to = (i - 1 + n) % n; }
+                    if (e.key === 'Home') { to = 0; }
+                    if (e.key === 'End') { to = n - 1; }
+                    if (to !== null) { e.preventDefault(); select(to, true); }
+                });
+            });
+            // deep link, e.g. programs.html#duty-roster
+            var hash = window.location.hash.replace('#', '');
+            var start = panels.findIndex(function (p) { return p.id === hash; });
+            select(start > -1 ? start : 0, false);
+        });
+    }
+
+    /* ---------- 5. Filter pills ---------- */
+    function initFilter() {
+        var group = $('[data-filter-group]');
+        var list = $('[data-filter-list]');
+        if (!group || !list) { return; }
+        var pills = $$('.pill', group);
+        pills.forEach(function (pill) {
+            pill.addEventListener('click', function () {
+                var f = pill.getAttribute('data-filter');
+                pills.forEach(function (p) { p.setAttribute('aria-pressed', String(p === pill)); });
+                $$('li', list).forEach(function (li) {
+                    li.hidden = !(f === 'all' || li.getAttribute('data-status') === f);
+                });
+            });
+        });
+    }
+
+    /* ---------- 6. Gallery lightbox ---------- */
+    function initLightbox() {
+        var thumbs = $$('.gallery-item');
+        if (!thumbs.length) { return; }
+        var current = 0, lastFocus = null;
+
+        var dlg = document.createElement('dialog');
+        dlg.className = 'lightbox';
+        dlg.setAttribute('aria-label', 'Image viewer');
+        dlg.innerHTML =
+            '<button class="lb-btn lb-close" type="button" aria-label="Close image">&times;</button>' +
+            '<button class="lb-btn lb-prev" type="button" aria-label="Previous image">&#8249;</button>' +
+            '<figure class="lightbox-figure"><img alt="" src=""><figcaption></figcaption></figure>' +
+            '<button class="lb-btn lb-next" type="button" aria-label="Next image">&#8250;</button>';
+        document.body.appendChild(dlg);
+        var img = $('img', dlg), cap = $('figcaption', dlg);
+
+        function show(i) {
+            current = (i + thumbs.length) % thumbs.length;
+            var t = thumbs[current];
+            img.src = t.getAttribute('data-full');
+            img.alt = t.getAttribute('data-alt') || '';
+            cap.innerHTML = '';
+            var count = document.createElement('div');
+            count.className = 'lightbox-count';
+            count.textContent = (current + 1) + ' / ' + thumbs.length;
+            cap.appendChild(count);
+            cap.appendChild(document.createTextNode(t.getAttribute('data-caption') || ''));
+        }
+        function open(i) {
+            lastFocus = document.activeElement;
+            show(i);
+            if (typeof dlg.showModal === 'function') { dlg.showModal(); } else { dlg.setAttribute('open', ''); }
+            $('.lb-close', dlg).focus();
+        }
+        function close() {
+            if (typeof dlg.close === 'function') { dlg.close(); } else { dlg.removeAttribute('open'); }
+            if (lastFocus) { lastFocus.focus(); }
+        }
+
+        thumbs.forEach(function (t, i) { t.addEventListener('click', function () { open(i); }); });
+        $('.lb-close', dlg).addEventListener('click', close);
+        $('.lb-prev', dlg).addEventListener('click', function () { show(current - 1); });
+        $('.lb-next', dlg).addEventListener('click', function () { show(current + 1); });
+        // click on the dark backdrop closes
+        dlg.addEventListener('click', function (e) { if (e.target === dlg) { close(); } });
+        dlg.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowLeft') { show(current - 1); }
+            if (e.key === 'ArrowRight') { show(current + 1); }
+        });
+    }
+
+    /* ---------- 7. Interactive map ---------- */
+    function initMap() {
+        var el = $('#map');
+        if (!el) { return; }
+        if (typeof window.L === 'undefined') {
+            el.innerHTML = '<p class="map-fallback">The interactive map could not be loaded. ' +
+                '<a class="text-link" href="https://www.openstreetmap.org/?mlat=-32.786748&amp;mlon=26.623616#map=15/-32.786748/26.623616" rel="noopener noreferrer">Open the location on OpenStreetMap</a>.</p>';
+            return;
+        }
+        var lat = parseFloat(el.getAttribute('data-lat'));
+        var lng = parseFloat(el.getAttribute('data-lng'));
+        var map = L.map(el, { scrollWheelZoom: false }).setView([lat, lng], 15);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        var icon = L.divIcon({ className: 'map-pin', html: '<span></span>', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -28] });
+        var popup = document.createElement('div');
+        var b = document.createElement('strong'); b.textContent = el.getAttribute('data-name');
+        popup.appendChild(b);
+        popup.appendChild(document.createElement('br'));
+        popup.appendChild(document.createTextNode('Parliament Street, Fort Beaufort'));
+        popup.appendChild(document.createElement('br'));
+        var dir = document.createElement('a');
+        dir.href = 'https://www.openstreetmap.org/directions?to=' + lat + '%2C' + lng;
+        dir.target = '_blank'; dir.rel = 'noopener noreferrer'; dir.textContent = 'Get directions';
+        popup.appendChild(dir);
+        L.marker([lat, lng], { icon: icon, title: el.getAttribute('data-name'), alt: 'School location' }).addTo(map).bindPopup(popup).openPopup();
+        // wheel-zoom only after the map is clicked, so page scrolling is not hijacked
+        map.on('click', function () { map.scrollWheelZoom.enable(); });
+        map.on('mouseout', function () { map.scrollWheelZoom.disable(); });
+    }
+
+    /* ---------- 8. Forms ---------- */
+    var FALLBACK_DATA = {
+        admissions: { grade8: { places: 12, fee: 18500 }, grade9: { places: 5, fee: 18500 }, grade10: { places: 3, fee: 19500 }, grade11: { places: 0, fee: 19500 }, grade12: { places: 0, fee: 20500 } },
+        products: { box_small: { label: 'Weekly box: Small', price: 180, stock: 'In stock' }, box_medium: { label: 'Weekly box: Medium', price: 320, stock: 'In stock' }, box_large: { label: 'Weekly box: Large', price: 450, stock: 'In stock' }, eggs: { label: 'Free-range eggs (tray of 30)', price: 95, stock: 'In stock' }, lucerne: { label: 'Lucerne bale', price: 110, stock: 'In stock' }, citrus: { label: 'Citrus fruit (5 kg bag)', price: 60, stock: 'Out of season' } },
+        boxes: { small: 180, medium: 320, large: 450 }
+    };
+
+    var money = function (n) { return 'R' + Number(n).toLocaleString('en-ZA'); };
+
+    /** Returns an error message for a field, or '' when valid. */
+    function check(field) {
+        // fields inside a hidden (conditional) block are not validated
+        if (field.closest('[hidden]')) { return ''; }
+        var label = field.getAttribute('data-label') || 'this field';
+        var v = field.value.trim();
+        var isSelect = field.tagName === 'SELECT';
+
+        if (field.required && v === '') {
+            return isSelect ? 'Please choose a ' + label + '.' : 'Please enter your ' + label + '.';
+        }
+        if (v === '') { return ''; }
+
+        if (field.minLength > 0 && v.length < field.minLength) {
+            return 'The ' + label + ' must be at least ' + field.minLength + ' characters (currently ' + v.length + ').';
+        }
+        if (field.maxLength > 0 && v.length > field.maxLength) {
+            return 'The ' + label + ' must be ' + field.maxLength + ' characters or fewer.';
+        }
+        if (field.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) {
+            return 'Please enter a valid email address, like name@example.com.';
+        }
+        if (field.getAttribute('data-type') === 'za-phone') {
+            var digits = v.replace(/[\s\-()]/g, '');
+            if (!/^(\+27|0027|0)[1-9]\d{8}$/.test(digits)) {
+                return 'Enter a valid South African number, e.g. 082 123 4567 or +27 82 123 4567.';
+            }
+        }
+        var pattern = field.getAttribute('pattern');
+        if (pattern) {
+            try {
+                if (!new RegExp('^(?:' + pattern + ')$', 'u').test(v)) {
+                    return 'The ' + label + ' contains characters that are not allowed.';
+                }
+            } catch (err) { /* ignore malformed pattern */ }
+        }
+        if (field.type === 'number') {
+            var n = Number(v);
+            if (isNaN(n) || (field.min !== '' && n < Number(field.min)) || (field.max !== '' && n > Number(field.max))) {
+                return 'Please enter a ' + label + ' between ' + field.min + ' and ' + field.max + '.';
+            }
+        }
+        if (field.getAttribute('data-type') === 'future-date') {
+            var chosen = new Date(v + 'T00:00:00');
+            var today = new Date(); today.setHours(0, 0, 0, 0);
+            var limit = new Date(today); limit.setFullYear(limit.getFullYear() + 1);
+            if (isNaN(chosen.getTime())) { return 'Please choose a valid date.'; }
+            if (chosen < today) { return 'The start date cannot be in the past.'; }
+            if (chosen > limit) { return 'Please choose a date within the next 12 months.'; }
+        }
+        return '';
+    }
+
+    function setError(field, msg) {
+        var wrap = field.closest('.field');
+        if (!wrap) { return; }
+        var err = $('.error-msg', wrap);
+        if (!err) {
+            err = document.createElement('span');
+            err.className = 'error-msg';
+            err.id = field.id + '-error';
+            err.setAttribute('role', 'alert');
+            wrap.appendChild(err);
+        }
+        err.textContent = msg;
+        wrap.classList.toggle('has-error', !!msg);
+        wrap.classList.toggle('is-valid', !msg && field.value.trim() !== '');
+        if (msg) {
+            field.setAttribute('aria-invalid', 'true');
+            field.setAttribute('aria-describedby', err.id);
+        } else {
+            field.removeAttribute('aria-invalid');
+            field.removeAttribute('aria-describedby');
+        }
+    }
+
+    function validateField(field) { var m = check(field); setError(field, m); return !m; }
+
+    function el(tag, cls, text) {
+        var e = document.createElement(tag);
+        if (cls) { e.className = cls; }
+        if (text !== undefined) { e.textContent = text; }
+        return e;
+    }
+
+    function showResult(form, node) {
+        var box = $('.form-status', form);
+        box.innerHTML = '';
+        box.appendChild(node);
+        node.setAttribute('tabindex', '-1');
+        node.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+        node.focus({ preventScroll: true });
+    }
+
+    function summary(rows) {
+        var dl = el('dl');
+        rows.forEach(function (r) { dl.appendChild(el('dt', null, r[0])); dl.appendChild(el('dd', null, r[1])); });
+        return dl;
+    }
+
+    /** AJAX: asynchronously fetch pricing/availability JSON; falls back to built-in data offline or on file:// */
+    function loadData(url) {
+        if (!window.fetch || !url) { return Promise.resolve(FALLBACK_DATA); }
+        return fetch(url, { headers: { 'Accept': 'application/json' }, cache: 'no-cache' })
+            .then(function (r) { if (!r.ok) { throw new Error('HTTP ' + r.status); } return r.json(); })
+            .catch(function () { return FALLBACK_DATA; });
+    }
+
+    function setBusy(form, busy) {
+        var btn = $('button[type="submit"]', form);
+        if (!btn) { return; }
+        btn.disabled = busy;
+        if (busy) {
+            btn.dataset.label = btn.textContent;
+            btn.classList.add('no-arrow');
+            btn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Sending...';
+        } else {
+            btn.classList.remove('no-arrow');
+            btn.textContent = btn.dataset.label || 'Submit';
+        }
+    }
+
+    /* ----- Enquiry form: conditional fields + AJAX response about cost / availability ----- */
+    function enquiryResponse(f, data) {
+        var card = el('div', 'result-card');
+        var topic = f.enq_topic.value;
+        var name = f.enq_name.value.trim().split(/\s+/)[0];
+        card.appendChild(el('h3', null, 'Thank you, ' + name + '. Here is what we found:'));
+
+        if (topic === 'admissions') {
+            var g = (data.admissions || {})[f.enq_grade.value] || {};
+            var gradeText = f.enq_grade.options[f.enq_grade.selectedIndex].text;
+            var avail = g.places > 0 ? g.places + ' place' + (g.places === 1 ? '' : 's') + ' currently available' : 'Currently full. We will add you to the waiting list';
+            card.appendChild(summary([['Grade', gradeText], ['Availability', avail], ['Indicative annual fee', g.fee ? money(g.fee) : 'On request']]));
+            card.appendChild(el('p', null, 'Our admissions office will contact you at ' + f.enq_email.value.trim() + ' with the application pack.'));
+        } else if (topic === 'products') {
+            var p = (data.products || {})[f.enq_item.value] || {};
+            var qty = parseInt(f.enq_qty.value, 10) || 1;
+            card.appendChild(summary([['Item', p.label || 'Selected produce'], ['Availability', p.stock || 'Please ask'],
+                ['Quantity', String(qty)], ['Indicative total', p.price ? money(p.price * qty) : 'On request']]));
+            card.appendChild(el('p', null, p.stock === 'In stock' ? 'We will confirm collection or delivery details by email.' : 'This item is out of season. We will tell you when it is available again.'));
+        } else if (topic === 'volunteer') {
+            card.appendChild(el('p', null, 'We are glad you would like to volunteer. Our office will reply with current needs on the farm and in the classroom.'));
+        } else {
+            card.appendChild(el('p', null, 'Thank you for considering sponsoring a student or project. Our office will send you information on how your contribution is used.'));
+        }
+        card.appendChild(el('p', null, 'Prices are indicative and are confirmed by the school office.'));
+        return card;
+    }
+
+    function initEnquiryToggle(form) {
+        var topic = $('#enq_topic', form);
+        if (!topic) { return; }
+        var blocks = $$('[data-show-for]', form);
+        function update() {
+            blocks.forEach(function (b) {
+                var show = b.getAttribute('data-show-for').split(' ').indexOf(topic.value) > -1;
+                b.hidden = !show;
+                var input = $('select, input', b);
+                // required only while visible (DOM manipulation)
+                if (input && b.getAttribute('data-show-for').indexOf('volunteer') === -1) { input.required = show; }
+                if (!show) { setError(input, ''); b.classList.remove('is-valid'); }
+            });
+        }
+        topic.addEventListener('change', update);
+        update();
+    }
+
+    /* ----- Contact form: compile the validated data into an email ----- */
+    function contactResponse(form) {
+        var f = form.elements;
+        var to = form.getAttribute('data-recipient');
+        var subject = '[' + f.c_type.value + '] ' + f.c_subject.value.trim();
+        var body = 'Name: ' + f.c_name.value.trim() + '\n' +
+                   'Email: ' + f.c_email.value.trim() + '\n' +
+                   'Phone: ' + f.c_phone.value.trim() + '\n' +
+                   'Message type: ' + f.c_type.value + '\n\n' +
+                   f.c_message.value.trim() + '\n\n' +
+                   '- Sent from the Winterberg Agricultural High School website';
+        var href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
+        var card = el('div', 'result-card');
+        card.appendChild(el('h3', null, 'Your email is ready'));
+        card.appendChild(summary([['To', to], ['Subject', subject]]));
+        card.appendChild(el('pre', null, body));
+        var actions = el('div', 'form-actions');
+        var send = el('a', 'btn', 'Send email');
+        send.href = href;
+        actions.appendChild(send);
+        var edit = el('button', 'btn btn-outline no-arrow', 'Edit message');
+        edit.type = 'button';
+        edit.addEventListener('click', function () { $('#c_message', form).focus(); });
+        actions.appendChild(edit);
+        card.appendChild(actions);
+        card.appendChild(el('p', null, 'This opens your email app with everything filled in. Nothing is sent until you press Send there.'));
+        return card;
+    }
+
+    function subscriptionResponse(form, data) {
+        var f = form.elements;
+        var price = (data.boxes || {})[f.box_size.value];
+        var when = new Date(f.sub_start.value + 'T00:00:00').toLocaleDateString('en-ZA', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        var card = el('div', 'result-card');
+        card.appendChild(el('h3', null, 'Welcome to the farm, ' + f.sub_name.value.trim().split(/\s+/)[0] + '!'));
+        card.appendChild(summary([['Box', f.box_size.options[f.box_size.selectedIndex].text], ['Weekly cost', price ? money(price) : 'On request'], ['Starting', when]]));
+        card.appendChild(el('p', null, 'A confirmation will be sent to ' + f.sub_email.value.trim() + '. Prices are indicative and confirmed by the school office.'));
+        return card;
+    }
+
+    function initForms() {
+        $$('form[data-validate]').forEach(function (form) {
+            var kind = form.getAttribute('data-kind');
+            var fields = $$('input, select, textarea', form);
+
+            if (kind === 'enquiry') { initEnquiryToggle(form); }
+
+            // set the earliest/latest selectable date
+            var dateField = $('[data-type="future-date"]', form);
+            if (dateField) {
+                var d = new Date(); d.setHours(0, 0, 0, 0);
+                var iso = function (x) { return new Date(x.getTime() - x.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
+                dateField.min = iso(d);
+                var lim = new Date(d); lim.setFullYear(lim.getFullYear() + 1);
+                dateField.max = iso(lim);
+            }
+
+            // live character counter
+            $$('[data-counter]', form).forEach(function (ta) {
+                var out = ta.parentNode.querySelector('.char-count');
+                var upd = function () { if (out) { out.textContent = ta.value.length + ' / ' + ta.maxLength; } };
+                ta.addEventListener('input', upd); upd();
+            });
+
+            fields.forEach(function (f) {
+                f.addEventListener('blur', function () { if (f.value !== '' || f.required) { validateField(f); } });
+                var evt = f.tagName === 'SELECT' ? 'change' : 'input';
+                f.addEventListener(evt, function () {
+                    var wrap = f.closest('.field');
+                    if (wrap && (wrap.classList.contains('has-error') || wrap.classList.contains('is-valid'))) { validateField(f); }
+                });
+            });
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var bad = fields.filter(function (f) { return !validateField(f); });
+                var status = $('.form-status', form);
+                status.innerHTML = '';
+                if (bad.length) {
+                    var warn = el('div', 'result-card', 'Please fix ' + bad.length + ' field' + (bad.length === 1 ? '' : 's') + ' highlighted above, then submit again.');
+                    status.appendChild(warn);
+                    bad[0].focus();
+                    return;
+                }
+                if (kind === 'contact') {
+                    showResult(form, contactResponse(form));
+                    return;
+                }
+                // AJAX submissions (enquiry + subscription)
+                setBusy(form, true);
+                var started = Date.now();
+                loadData(form.getAttribute('data-endpoint')).then(function (data) {
+                    var wait = Math.max(0, 600 - (Date.now() - started));   // short pause so the loading state is visible
+                    setTimeout(function () {
+                        setBusy(form, false);
+                        showResult(form, kind === 'enquiry' ? enquiryResponse(form.elements, data) : subscriptionResponse(form, data));
+                    }, wait);
+                });
+            });
+        });
+    }
+
+    /* ---------- start ---------- */
+    function init() {
+        initNav();
+        initReveal();
+        initAccordions();
+        initTabs();
+        initFilter();
+        initLightbox();
+        initMap();
+        initForms();
+    }
+    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
+}());
