@@ -1,0 +1,62 @@
+{
+  "_note": "SAMPLE FIGURES: replace with the school's real prices, fees and capacity before publishing.",
+  "admissions": {
+    "grade8": {
+      "places": 12,
+      "fee": 18500
+    },
+    "grade9": {
+      "places": 5,
+      "fee": 18500
+    },
+    "grade10": {
+      "places": 3,
+      "fee": 19500
+    },
+    "grade11": {
+      "places": 0,
+      "fee": 19500
+    },
+    "grade12": {
+      "places": 0,
+      "fee": 20500
+    }
+  },
+  "products": {
+    "box_small": {
+      "label": "Weekly box: Small",
+      "price": 180,
+      "stock": "In stock"
+    },
+    "box_medium": {
+      "label": "Weekly box: Medium",
+      "price": 320,
+      "stock": "In stock"
+    },
+    "box_large": {
+      "label": "Weekly box: Large",
+      "price": 450,
+      "stock": "In stock"
+    },
+    "eggs": {
+      "label": "Free-range eggs (tray of 30)",
+      "price": 95,
+      "stock": "In stock"
+    },
+    "lucerne": {
+      "label": "Lucerne bale",
+      "price": 110,
+      "stock": "In stock"
+    },
+    "citrus": {
+      "label": "Citrus fruit (5 kg bag)",
+      "price": 60,
+      "stock": "Out of season"
+    }
+  },
+  "boxes": {
+    "small": 180,
+    "medium": 320,
+    "large": 450
+  }
+}
