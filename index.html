@@ -50,6 +50,10 @@
             <a href="./pages/enquiry.html">ENQUIRY</a>
             <a href="./pages/contact.html">CONTACT</a>
         </nav>
+        <button class="search-btn" type="button" aria-haspopup="dialog" aria-label="Search the site">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M16 16l6 6"/></svg>
+            <span>Search</span><kbd aria-hidden="true">/</kbd>
+        </button>
     </header>
 
     <main id="main">
@@ -119,27 +123,27 @@
                     <p class="lede">Select any image to view it larger. Use the arrow keys to move through the gallery and Esc to close.</p>
                 </div>
                 <div class="gallery" id="gallery" role="list" aria-label="Photo gallery. Select an image to enlarge it.">
-                <button class="gallery-item reveal" type="button" data-full="./assets/images/dairy-herd.svg" data-caption="Dairy herd" data-alt="Illustration of dairy cows grazing on the Winterberg school farm" data-delay="0">
+                <button class="gallery-item reveal" type="button" data-full="./assets/images/dairy-herd.png" data-caption="Dairy herd" data-alt="Illustration of dairy cows grazing on the Winterberg school farm" data-delay="0">
                     <img src="./assets/images/dairy-herd.svg" width="800" height="600" loading="lazy" alt="Illustration of dairy cows grazing on the Winterberg school farm">
                     <span class="cap">Dairy herd</span>
                 </button>
-                <button class="gallery-item reveal" type="button" data-full="./assets/images/citrus-orchard.svg" data-caption="Citrus orchards" data-alt="Illustration of rows of orange trees in the school citrus orchard" data-delay="1">
+                <button class="gallery-item reveal" type="button" data-full="./assets/images/citrus-orchard.png" data-caption="Citrus orchards" data-alt="Illustration of rows of orange trees in the school citrus orchard" data-delay="1">
                     <img src="./assets/images/citrus-orchard.svg" width="800" height="600" loading="lazy" alt="Illustration of rows of orange trees in the school citrus orchard">
                     <span class="cap">Citrus orchards</span>
                 </button>
-                <button class="gallery-item reveal" type="button" data-full="./assets/images/lucerne-fields.svg" data-caption="Lucerne fields" data-alt="Illustration of lucerne fields with round hay bales" data-delay="2">
+                <button class="gallery-item reveal" type="button" data-full="./assets/images/lucerne-fields.png" data-caption="Lucerne fields" data-alt="Illustration of lucerne fields with round hay bales" data-delay="2">
                     <img src="./assets/images/lucerne-fields.svg" width="800" height="600" loading="lazy" alt="Illustration of lucerne fields with round hay bales">
                     <span class="cap">Lucerne fields</span>
                 </button>
-                <button class="gallery-item reveal" type="button" data-full="./assets/images/welding-workshop.svg" data-caption="Welding and metalwork" data-alt="Illustration of an anvil and welding sparks in the school workshop" data-delay="0">
+                <button class="gallery-item reveal" type="button" data-full="./assets/images/welding-workshop.png" data-caption="Welding and metalwork" data-alt="Illustration of an anvil and welding sparks in the school workshop" data-delay="0">
                     <img src="./assets/images/welding-workshop.svg" width="800" height="600" loading="lazy" alt="Illustration of an anvil and welding sparks in the school workshop">
                     <span class="cap">Welding and metalwork</span>
                 </button>
-                <button class="gallery-item reveal" type="button" data-full="./assets/images/greenhouse.svg" data-caption="Greenhouses" data-alt="Illustration of a greenhouse full of young seedlings" data-delay="1">
+                <button class="gallery-item reveal" type="button" data-full="./assets/images/greenhouse.png" data-caption="Greenhouses" data-alt="Illustration of a greenhouse full of young seedlings" data-delay="1">
                     <img src="./assets/images/greenhouse.svg" width="800" height="600" loading="lazy" alt="Illustration of a greenhouse full of young seedlings">
                     <span class="cap">Greenhouses</span>
                 </button>
-                <button class="gallery-item reveal" type="button" data-full="./assets/images/classroom.svg" data-caption="Classroom learning" data-alt="Illustration of a classroom blackboard with a graph" data-delay="2">
+                <button class="gallery-item reveal" type="button" data-full="./assets/images/classroom.png" data-caption="Classroom learning" data-alt="Illustration of a classroom blackboard with a graph" data-delay="2">
                     <img src="./assets/images/classroom.svg" width="800" height="600" loading="lazy" alt="Illustration of a classroom blackboard with a graph">
                     <span class="cap">Classroom learning</span>
                 </button>
@@ -196,6 +200,7 @@
 
     <button class="to-top" type="button" aria-label="Back to top">&uarr;</button>
 
+    <script src="./assets/js/search-index.js" defer></script>
     <script src="./assets/js/main.js" defer></script>
 </body>
 </html>
