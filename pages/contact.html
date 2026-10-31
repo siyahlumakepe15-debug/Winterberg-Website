@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#000000">
     <link rel="canonical" href="https://siyahlumakepe15-debug.github.io/Winterberg-Website/pages/contact.html">
     <!-- Security: Content-Security-Policy and referrer policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-XYmYjDeUQsiDZmqTxoNeE4vn2Ucakln2xhVBcDHF1Vg=' https://unpkg.com; style-src 'self' https://unpkg.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.tile.openstreetmap.org; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-XYmYjDeUQsiDZmqTxoNeE4vn2Ucakln2xhVBcDHF1Vg=' https://unpkg.com; style-src 'self' https://unpkg.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://tile.openstreetmap.org https://*.tile.openstreetmap.org; connect-src 'self'; frame-src https://www.openstreetmap.org; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <!-- Social sharing -->
     <meta property="og:type" content="website">
@@ -26,7 +26,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
     <link rel="stylesheet" href="../assets/css/style.css">
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "EducationalOrganization", "name": "Winterberg Agricultural High School", "alternateName": "Winterberg Landbou Hoërskool", "url": "https://siyahlumakepe15-debug.github.io/Winterberg-Website/", "logo": "https://siyahlumakepe15-debug.github.io/Winterberg-Website/assets/images/winterberg-crest.png", "foundingDate": "1972", "email": "amandac@winagric.co.za", "telephone": "+27465550005", "address": {"@type": "PostalAddress", "streetAddress": "Parliament Street", "addressLocality": "Fort Beaufort", "addressRegion": "Eastern Cape", "postalCode": "5720", "addressCountry": "ZA"}, "geo": {"@type": "GeoCoordinates", "latitude": -32.7867, "longitude": 26.6236}, "openingHours": "Mo-Fr 08:00-14:00"}</script>
     <script>document.documentElement.className="js";setTimeout(function(){if(!window.__wb){document.documentElement.className="no-js"}},2500);</script>
@@ -80,10 +79,10 @@
                     </ul>
                 </div>
                 <div class="map-card reveal" data-delay="1">
-                    <div id="map" data-lat="-32.786748" data-lng="26.623616" data-name="Winterberg Agricultural High School" role="region" aria-label="Interactive map showing the school location">
-                        <noscript><p class="map-fallback">Enable JavaScript to see the interactive map, or open
-                            <a class="text-link" href="https://www.openstreetmap.org/?mlat=-32.786748&amp;mlon=26.623616#map=15/-32.786748/26.623616" rel="noopener noreferrer">the location on OpenStreetMap</a>.</p></noscript>
-                    </div>
+                    <iframe class="map-embed" title="Map showing the location of Winterberg Agricultural High School in Fort Beaufort"
+                        src="https://www.openstreetmap.org/export/embed?bbox=26.61699771881104%2C-32.79448990778697%2C26.6319751739502%2C-32.781646123556456&amp;layer=mapnik&amp;marker=-32.78806914925373%2C26.62448428727714"
+                        width="425" height="350" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                    <p class="map-link"><a class="text-link" href="https://www.openstreetmap.org/?mlat=-32.78807&amp;mlon=26.62448#map=16/-32.78807/26.62448" target="_blank" rel="noopener noreferrer">View larger map</a></p>
                 </div>
             </div>
         </section>
@@ -160,7 +159,6 @@
 
     <button class="to-top" type="button" aria-label="Back to top">&uarr;</button>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
     <script src="../assets/js/search-index.js" defer></script>
     <script src="../assets/js/main.js" defer></script>
 </body>
