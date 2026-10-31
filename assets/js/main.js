@@ -15,6 +15,7 @@
    ========================================================= */
 (function () {
     'use strict';
+    window.__wb = true;   // tells the page this script loaded (see the safety timer in each page's <head>)
 
     var $ = function (sel, ctx) { return (ctx || document).querySelector(sel); };
     var $$ = function (sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); };
