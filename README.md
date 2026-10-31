@@ -18,8 +18,10 @@ Winterberg Website/
 ├── assets/
 │   ├── css/style.css        # Single external stylesheet
 │   ├── js/main.js           # All JavaScript (Part 3)
+│   ├── js/search-index.js   # Generated index used by site search
 │   ├── data/pricing.json    # Sample prices/availability fetched by AJAX
 │   └── images/              # Crest and gallery images
+├── tools/build_search_index.py  # Rebuilds the search index after you edit page text
 ├── robots.txt
 ├── sitemap.xml
 ├── README.md
@@ -42,12 +44,13 @@ JavaScript switched off.
 |---|---|
 | Accordions | FAQ on `enquiry.html`, timeline on `about.html` (ARIA, arrow-key support) |
 | Tabs | Curriculum / Duty Roster / Safety on `programs.html` (keyboard + deep links such as `programs.html#duty-roster`) |
-| Modal / lightbox gallery | `<dialog>` lightbox on the home page: click to enlarge, arrow keys, Esc, backdrop click |
+| Modal / lightbox gallery | `<dialog>` lightbox on the home page: click to enlarge, arrow keys, Esc, backdrop click, Download image button (PNG) |
 | Interactive map | Leaflet + OpenStreetMap on `contact.html` with marker, popup and directions link (plain-link fallback if it cannot load) |
 | Animations and transitions | CSS transitions/keyframes plus JS scroll-reveal, animated counters, sticky-header shrink (disabled for `prefers-reduced-motion`) |
 | DOM manipulation | Enquiry form shows/hides fields and toggles `required` by topic; produce filter pills; mobile menu; dynamic error messages and result cards |
 | enquiry.html form | Admissions / produce / volunteer / sponsor. After validation, the response (availability, indicative cost) is built from `assets/data/pricing.json` |
 | contact.html form | Name, email, phone, message type, subject, message. Validated data is compiled into an email addressed to `amandac@winagric.co.za` and opened through a `mailto:` link |
+| Site search | Header **Search** button (also press `/` or Ctrl+K): live results across every page with highlighted matches, arrow keys + Enter, and `?q=term` links. Uses `assets/js/search-index.js`. After editing page text, run `python tools/build_search_index.py` to refresh it |
 | Form elements | `input`, `select`, `textarea`, `date`, `number`, `tel`, `email` |
 | Validation | HTML5 attributes (`required`, `type`, `minlength`, `maxlength`, `pattern`, `min`/`max`) plus JavaScript: email format, South African phone numbers, name characters, character counts, date range |
 | Error handling | Inline messages per field (`role="alert"`, `aria-invalid`), summary message, focus moves to the first error |
